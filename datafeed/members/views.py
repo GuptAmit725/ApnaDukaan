@@ -1,10 +1,18 @@
 from django.http import HttpResponse
 from django.template import loader
 from .models import Member
+from .forms import CustomerForm
+from django.shortcuts import render
 
 def members(request):
-    mymembers = Member.objects.all().values()
-    template = loader.get_template('all_members.html')
+    #mymembers = Member.objects.all().values()
+    mymembers = Member()
+    template = loader.get_template('form.html')#('all_members.html')
+    if request.method=='POST':
+        mymember = Member(request.POST)
+        if mymember.is_valid():
+            mymember.save()
+
     context = {
     'mymembers': mymembers,
     }
@@ -27,4 +35,11 @@ def testing(request):
     context = {
     'fruits': ['Apple', 'Banana', 'Cherry'],   
     }
+    return HttpResponse(template.render(context, request))
+
+def index(request):
+    template = loader.get_template('form.html')
+    form = CustomerForm()
+    context = {'form':form}
+    #return render(request, 'datafeed\members\templates\form.html', )
     return HttpResponse(template.render(context, request))
