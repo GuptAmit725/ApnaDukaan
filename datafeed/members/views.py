@@ -10,6 +10,7 @@ def members(request):
     template = loader.get_template('form.html')#('all_members.html')
     if request.method=='POST':
         mymember = Member(request.POST)
+        print(mymember)
         if mymember.is_valid():
             mymember.save()
 
